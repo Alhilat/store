@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #f8fafc; margin: 0; padding: 40px; }
+        .cart-container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
+        .item-info { display: flex; flex-direction: column; }
+        .item-price-group { display: flex; align-items: center; gap: 15px; }
+        .total-section { margin-top: 20px; text-align: right; font-size: 1.5rem; font-weight: bold; padding: 10px 0; }
+        .btn-confirm { width: 100%; background: #10b981; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-top: 20px; font-weight: bold; }
+        .btn-confirm:hover { background: #059669; }
+        .btn-remove { color: #ef4444; text-decoration: none; font-size: 0.85rem; font-weight: 500; }
+        .btn-remove:hover { text-decoration: underline; }
+        .back-link { display: inline-block; margin-top: 20px; color: #64748b; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="cart-container">
+        <h1>Your Bag</h1>
+        
+        {% if items %}
+            {# Each item is rendered inside this loop #}
+            {% for item in items %}
+            <div class="item-row">
+                <span>{{ item.name }}</span>
+                <div class="item-price-group">
+                    <strong>${{ "{:,.2f}".format(item.price) }}</strong>
+                    {# The remove link must be inside the loop to get the correct index #}
+                    <a href="{{ url_for('remove_from_cart', index=loop.index0) }}" class="btn-remove">
+                        Remove
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="total-section">
+                Total: ${{ "{:,.2f}".format(total) }}
+            </div>
+
+            <button class="btn-confirm" onclick="alert('Order Processed!')">Confirm Order</button>
+        {% else %}
+            <div style="text-align: center; padding: 40px 0;">
+                <p style="font-size: 1.2rem; color: #94a3b8;">Your cart is empty.</p>
+            </div>
+        {% endif %}
+
+        <a href="/" class="back-link">← Continue Shopping</a>
+    </div>
+</body>
+</html>
